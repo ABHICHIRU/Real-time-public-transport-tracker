@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tourist Guide App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #FF0000;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        nav ul li {
+            display: inline;
+            margin: 0 1rem;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+        }
+
+        main {
+            padding: 1rem;
+        }
+
+        section {
+            margin-bottom: 2rem;
+        }
+
+        #mapContainer {
+            width: 100%;
+            height: 400px;
+            background-color: #ddd;
+        }
+
+        #placesContainer, #storesContainer, #hospitalsContainer {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .item {
+            border: 1px solid #ccc;
+            padding: 1rem;
+            margin: 0.5rem;
+            width: calc(33.333% - 1rem);
+            box-sizing: border-box;
+        }
+
+        /* Adjust item width for smaller screens */
+        @media (max-width: 768px) {
+            .item {
+                width: calc(50% - 1rem);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .item {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Namma Karnataka</h1>
+        <nav>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#map">Map</a></li>
+                <li><a href="#places">Places</a></li>
+                <li><a href="#hotels-restaurants">Hotels and Restaurants</a></li>
+                <li><a href="#hospitals">Hospitals</a></li>
+                <li><a href="#profile">Profile</a></li>
+		<li><a href="#bustiming">bustiming</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main>
+        <section id="home">
+            <h2>Welcome to Namma Karnataka</h2>
+            <h3>"One State, Many Worlds"</h3>
+            <p>Find the best tourist places, stores, and hospitals around you.</p>
+        </section>
+
+        <section id="map">
+            <h2>Map</h2>
+            <div id="mapContainer"></div>
+        </section>
+
+        <section id="places">
+            <h2>Tourist Places</h2>
+            <div id="placesContainer"></div>
+        </section>
+
+        <section id="hotels-restaurants">
+            <h2>Hotels and Restaurants</h2>
+            <div id="storesContainer"></div>
+        </section>
+
+        <section id="hospitals">
+            <h2>Hospitals</h2>
+            <div id="hospitalsContainer"></div>
+        </section>
+
+        <section id="profile">
+            <h2>Profile</h2>
+            <div id="profileContainer"></div>
+        </section>
+	<section id="bustiming">
+            <h2>bustiming</h2>
+            <div id="bustimingContainer"></div>
+        </section>
+
+    </main>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            initMap();
+            displayPlaces();
+            displayStores();
+            displayHospitals();
+            displayProfile();
+	    displaybustiming();
+        });
+
+        function initMap() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition, showError);
+            } else {
+                showError({ code: 0 });
+            }
+        }
+
+        function showPosition(position) {
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+            const mapContainer = document.getElementById("mapContainer");
+            mapContainer.innerHTML = `<iframe 
+                width="100%" 
+                height="100%" 
+                frameborder="0" 
+                style="border:0" 
+                src="https://www.openstreetmap.org/export/embed.html?bbox=${lon-0.05},${lat-0.05},${lon+0.05},${lat+0.05}" 
+                allowfullscreen>
+            </iframe>`;
+        }
+
+        function showError(error) {
+            const mapContainer = document.getElementById("mapContainer");
+            let message = "Unable to fetch location. Showing default map.";
+            switch (error.code) {
+                case error.PERMISSION_DENIED:
+                    message = "User denied the request for Geolocation.";
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    message = "Location information is unavailable.";
+                    break;
+                case error.TIMEOUT:
+                    message = "The request to get user location timed out.";
+                    break;
+            }
+            mapContainer.innerHTML = `${message} <br><iframe 
+                width="100%" 
+                height="100%" 
+                frameborder="0" 
+                style="border:0" 
+                src="https://www.openstreetmap.org/export/embed.html?bbox=77.58,12.93,77.64,12.99" 
+                allowfullscreen>
+            </iframe>`;
+        }
+
+        function displayPlaces() {
+            const places = [
+                { name: "Mysore", description: "Mysore Palace" },
+                { name: "Chikkamagaluru", description: "Mullayanagiri Peak" },
+                { name: "Karwar", description: "Pristine Beaches" },
+            ];
+            populateItems("placesContainer", places);
+        }
+
+        function displayStores() {
+            const stores = [
+                { name: "Gayatri Tiffin House", description: "NS Road, Mysore" },
+                { name: "Kalash Parat", description: "Vijayapura, Chikkamagaluru" },
+                { name: "Hotel Amrut", description: "Karwar" },
+            ];
+            populateItems("storesContainer", stores);
+        }
+
+        function displayHospitals() {
+            const hospitals = [
+                { name: "Manipal Hospital", description: "Mysore" },
+                { name: "KRS Multispeciality Hospital", description: "Chikkamagaluru" },
+                { name: "Karwar Institute of Medical Sciences", description: "Karwar" },
+            ];
+            populateItems("hospitalsContainer", hospitals);
+        }
+
+        function displayProfile() {
+            const profileData = [
+                { name: "Name", description: "quantumcoders" },
+                { name: "Member ID", description: "G-28" },
+                { name: "Profile Picture", description: "Placeholder for image" },
+            ];
+            populateItems("profileContainer", profileData);
+        }
+	 function displaybustiming() {
+            const bustimmingData = [
+                { name: "route", description: "banasankari to mallasandra" },
+                { name: "route no.", description: "211AA" },
+                { name: "timming", description: "8:00" },
+            ];
+            populateItems("profileContainer", bustimingData);
+        }
+
+
+        function populateItems(containerId, items) {
+            const container = document.getElementById(containerId);
+            items.forEach(item => {
+                const div = document.createElement("div");
+                div.className = "item";
+                div.innerHTML = `<h3>${item.name}</h3><p>${item.description}</p>`;
+                container.appendChild(div);
+            });
+        }
+    </script>
+</body>
+</html>

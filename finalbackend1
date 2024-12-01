@@ -1,0 +1,53 @@
+from flask import Flask, jsonify, request
+
+app = Flask(_name_)
+
+# Sample data
+data = {
+    "places": [
+        {"name": "Mysore", "description": "Mysore Palace"},
+        {"name": "Chikkamagaluru", "description": "Mullayanagiri Peak"},
+        {"name": "Karwar", "description": "Pristine Beaches"},
+    ],
+    "stores": [
+        {"name": "Gayatri Tiffin House", "description": "NS Road, Mysore"},
+        {"name": "Kalash Parat", "description": "Vijayapura, Chikkamagaluru"},
+        {"name": "Hotel Amrut", "description": "Karwar"},
+    ],
+    "hospitals": [
+        {"name": "Manipal Hospital", "description": "Mysore"},
+        {"name": "KRS Multispeciality Hospital", "description": "Chikkamagaluru"},
+        {"name": "Karwar Institute of Medical Sciences", "description": "Karwar"},
+    ],
+    "profile": {
+        "name": "quantumcoders",
+        "member_id": "G-28",
+        "profile_picture": "Placeholder for image",
+    },
+    "bustimming": [
+        {"route": "Banasankari to Mallasandra", "route_no": "211AA", "timming": "8:00"},
+    ],
+}
+
+@app.route("/api/places", methods=["GET"])
+def get_places():
+    return jsonify(data["places"])
+
+@app.route("/api/stores", methods=["GET"])
+def get_stores():
+    return jsonify(data["stores"])
+
+@app.route("/api/hospitals", methods=["GET"])
+def get_hospitals():
+    return jsonify(data["hospitals"])
+
+@app.route("/api/profile", methods=["GET"])
+def get_profile():
+    return jsonify(data["profile"])
+
+@app.route("/api/bustimming", methods=["GET"])
+def get_bustimming():
+    return jsonify(data["bustimming"])
+
+if _name_ == "_main_":
+    app.run(debug=True)
